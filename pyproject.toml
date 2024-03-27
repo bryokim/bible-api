@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "holy-text"
+version = "0.1.0"
+description = "API for accessing the bible"
+authors = ["Brian Kim <bryo.kim1@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.110.0"
+uvicorn = "^0.29.0"
+pythonbible = { git = "https://github.com/bryokim/pythonbible.git" }
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
