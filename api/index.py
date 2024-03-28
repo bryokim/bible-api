@@ -3,7 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from src.bible.router import bible_router
+from api.bible.router import bible_router
 
 app = FastAPI()
 

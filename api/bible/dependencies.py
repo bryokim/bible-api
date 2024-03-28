@@ -2,9 +2,9 @@ from fastapi import HTTPException
 
 from pythonbible.validator import is_valid_chapter, is_valid_verse
 
-from src.bible.constants import SHORT_VERSION_NAMES
-from src.bible.schemas import AcceptedBookGroup, AcceptedVersion
-from src.bible.utils import get_book
+from api.bible.constants import SHORT_VERSION_NAMES
+from api.bible.schemas import AcceptedBookGroup, AcceptedVersion
+from api.bible.utils import get_book
 
 
 def normalize_bible_version(

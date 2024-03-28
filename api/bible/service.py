@@ -1,7 +1,7 @@
 import pythonbible as bible
 
-from src.bible.schemas import AcceptedVersion, AcceptedBookGroup
-from src.bible.utils import random_full_verse, get_book
+from api.bible.schemas import AcceptedVersion, AcceptedBookGroup
+from api.bible.utils import random_full_verse, get_book
 
 
 def get_verse_text(verse: str, bible_version: bible.Version):
