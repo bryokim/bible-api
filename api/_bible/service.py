@@ -2,8 +2,8 @@ from typing import Union
 
 import pythonbible as bible
 
-from api.bible.schemas import AcceptedVersion, AcceptedBookGroup
-from api.bible.utils import random_full_verse, get_book
+from api._bible.schemas import AcceptedVersion, AcceptedBookGroup
+from api._bible.utils import random_full_verse, get_book
 
 
 def get_verse_text(verse: str, bible_version: bible.Version):

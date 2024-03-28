@@ -9,7 +9,7 @@ from pythonbible.book_groups import BookGroup
 from pythonbible.validator import is_valid_chapter
 from pythonbible.verses import MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER
 
-from api.bible.exceptions import InvalidArgumentsError
+from api._bible.exceptions import InvalidArgumentsError
 
 
 @lru_cache

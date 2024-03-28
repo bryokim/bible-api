@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from pythonbible import BookGroup
 
-from api.bible.constants import MAPPED_BOOK_GROUPS
+from api._bible.constants import MAPPED_BOOK_GROUPS
 
 
 class AcceptedVersion(Enum):

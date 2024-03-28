@@ -3,7 +3,7 @@ from typing import Annotated, Union
 
 from pythonbible.errors import InvalidVerseError
 
-from api.bible.dependencies import (
+from api._bible.dependencies import (
     normalize_bible_version,
     validate_book,
     validate_chapter,
@@ -11,12 +11,12 @@ from api.bible.dependencies import (
     validate_random_book,
     validate_random_chapter,
 )
-from api.bible.schemas import (
+from api._bible.schemas import (
     AcceptedVersion,
     VerseResponse,
     AcceptedBookGroup,
 )
-from api.bible.service import get_parsed_verse, get_random_verse
+from api._bible.service import get_parsed_verse, get_random_verse
 
 
 bible_router = APIRouter(prefix="/bible", tags=["bible"])
