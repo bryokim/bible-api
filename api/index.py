@@ -22,9 +22,9 @@ async def validation_exception_handler(
     )
 
 
-@app.get("/")
+@app.get("/api")
 def root():
-    return "Welcome to holy-text"
+    return "Welcome to holy-text api"
 
 
-app.include_router(bible_router)
+app.include_router(bible_router, prefix='/api')
