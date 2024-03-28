@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi import HTTPException
 
 from pythonbible.validator import is_valid_chapter, is_valid_verse
@@ -160,9 +162,9 @@ def validate_verse(verse: str, book: str, chapter: int) -> str:
 
 
 def validate_random_book(
-    r_book: str | None = None,
+    r_book: Union[str, None] = None,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
-) -> str | None:
+) -> Union[str, None]:
     """Check to see if the given book is a valid book and is in the given group
 
     Args:
@@ -181,8 +183,8 @@ def validate_random_book(
 
 
 def validate_random_chapter(
-    r_book: str | None = None, r_chapter: int | None = None
-) -> int | None:
+    r_book: Union[str, None] = None, r_chapter: Union[int, None] = None
+) -> Union[int, None]:
     """Check to see if the given chapter is a valid chapter of a given book.
 
     Args:

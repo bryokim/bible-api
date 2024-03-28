@@ -1,3 +1,5 @@
+from typing import Union
+
 import pythonbible as bible
 
 from api.bible.schemas import AcceptedVersion, AcceptedBookGroup
@@ -18,9 +20,9 @@ def get_verse_text(verse: str, bible_version: bible.Version):
 
 def get_parsed_verse(
     verse: str,
-    bible_version: (
-        bible.Version | AcceptedVersion
-    ) = bible.Version.NEW_INTERNATIONAL,
+    bible_version: Union[
+        bible.Version, AcceptedVersion
+    ] = bible.Version.NEW_INTERNATIONAL,
 ) -> tuple[tuple[str, str], list[str]]:
     """Parses a verse into the book, chapter and requested verses' text.
 
@@ -59,13 +61,13 @@ def get_parsed_verse(
 
 
 def get_random_verse(
-    r_book: str | None = None,
-    r_chapter: int | None = None,
+    r_book: Union[str, None] = None,
+    r_chapter: Union[int, None] = None,
     verse_range: int = 0,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
-    bible_version: (
-        bible.Version | AcceptedVersion
-    ) = bible.Version.NEW_INTERNATIONAL,
+    bible_version: Union[
+        bible.Version, AcceptedVersion
+    ] = bible.Version.NEW_INTERNATIONAL,
 ) -> tuple[str, str]:
 
     _book = get_book(r_book) if r_book else None

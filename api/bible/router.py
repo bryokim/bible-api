@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
-from typing import Annotated
+from typing import Annotated, Union
 
 from pythonbible.errors import InvalidVerseError
 
@@ -31,8 +31,8 @@ async def verse(
     book: str = Depends(validate_book),
     chapter: int = Depends(validate_chapter),
     verse: str = Depends(validate_verse),
-    book_group: AcceptedBookGroup | None = AcceptedBookGroup.ANY,
-    bible_version: AcceptedVersion | None = Depends(normalize_bible_version),
+    book_group: Union[AcceptedBookGroup, None] = AcceptedBookGroup.ANY,
+    bible_version: Union[AcceptedVersion, None] = Depends(normalize_bible_version),
 ) -> VerseResponse:
     full_verse = f"{book.strip()} {chapter}:{verse.strip()}"
 
@@ -52,8 +52,8 @@ async def verse(
 
 @bible_router.get("/random-verse")
 async def random_verse(
-    r_book: str | None = Depends(validate_random_book),
-    r_chapter: str | None = Depends(validate_random_chapter),
+    r_book: Union[str, None] = Depends(validate_random_book),
+    r_chapter: Union[int, None] = Depends(validate_random_chapter),
     verse_range: Annotated[int, Query(gt=0, le=3)] = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = Depends(normalize_bible_version),

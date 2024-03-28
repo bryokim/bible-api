@@ -2,6 +2,7 @@ import random
 import re
 
 from functools import lru_cache
+from typing import Union
 
 from pythonbible.books import Book
 from pythonbible.book_groups import BookGroup
@@ -12,7 +13,7 @@ from api.bible.exceptions import InvalidArgumentsError
 
 
 @lru_cache
-def get_book(book: str) -> Book | None:
+def get_book(book: str) -> Union[Book, None]:
     """Gets a Book with a regex matching book.
 
     Args:
@@ -30,7 +31,7 @@ def get_book(book: str) -> Book | None:
             return _book
 
 
-def random_book(book_group: BookGroup | None = None) -> Book:
+def random_book(book_group: Union[BookGroup, None] = None) -> Book:
     """Returns random book from the Bible. If book_group is given, the
     book is chosen from that group.
 
@@ -68,10 +69,10 @@ def random_chapter_from_book(book: Book) -> int:
 
 
 def random_full_verse(
-    book: Book | None = None,
-    chapter: int | None = None,
+    book: Union[Book, None] = None,
+    chapter: Union[int, None] = None,
     verse_range: int = 1,
-    book_group: BookGroup | None = None,
+    book_group: Union[BookGroup, None] = None,
 ) -> str:
     """Gets a random verse.
 

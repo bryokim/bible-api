@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import Enum
 from pydantic import BaseModel
 
 from pythonbible import BookGroup
@@ -8,7 +8,7 @@ from pythonbible import BookGroup
 from api.bible.constants import MAPPED_BOOK_GROUPS
 
 
-class AcceptedVersion(StrEnum):
+class AcceptedVersion(Enum):
     NIV = "NEW_INTERNATIONAL"
     ASV = "AMERICAN_STANDARD"
     KJV = "KING_JAMES"
@@ -18,13 +18,13 @@ class AcceptedVersion(StrEnum):
     kJV_short = "KJV"
 
 
-class Testament(StrEnum):
+class Testament(Enum):
     ANY = "ANY"
     NEW = "New Testament"
     OLD = "Old Testament"
 
 
-class AcceptedBookGroup(StrEnum):
+class AcceptedBookGroup(Enum):
     # Default value for matching all
     ANY = "Any"
 
