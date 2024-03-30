@@ -12,7 +12,7 @@ app = FastAPI()
 
 LOCALHOST = os.getenv("BIBLE_UI_HOST", "")
 
-origins = ["bible-ui-two.vercel.app"]
+origins = ["https://bible-ui-two.vercel.app"]
 
 if LOCALHOST:
     origins.append(LOCALHOST)
