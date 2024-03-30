@@ -53,4 +53,5 @@ class AcceptedBookGroup(StrEnum):
 class VerseResponse(BaseModel):
     reference: str
     verse_text: list[str]
-    version: AcceptedVersion
+    book_group: AcceptedBookGroup
+    bible_version: AcceptedVersion

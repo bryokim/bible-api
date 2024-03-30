@@ -46,7 +46,8 @@ async def verse(
     return {
         "reference": "{} {}:{}".format(_book, _chapter, verse),
         "verse_text": verse_text,
-        "version": bible_version,
+        "book_group": book_group.value if book_group else "",
+        "bible_version": bible_version,
     }
 
 
@@ -57,7 +58,7 @@ async def random_verse(
     verse_range: Annotated[int, Query(gt=0, le=3)] = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = Depends(normalize_bible_version),
-):
+) -> VerseResponse:
     full_verse, verse_text = get_random_verse(
         r_book, r_chapter, verse_range, book_group, bible_version
     )
