@@ -3,9 +3,11 @@ import re
 
 from functools import lru_cache
 
+from pythonbible.bible import titles
 from pythonbible.books import Book
 from pythonbible.book_groups import BookGroup
 from pythonbible.validator import is_valid_chapter
+from pythonbible.versions import Version
 from pythonbible.verses import MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER
 
 from src.bible.exceptions import InvalidArgumentsError
@@ -30,7 +32,10 @@ def get_book(book: str) -> Book | None:
             return _book
 
 
-def random_book(book_group: BookGroup | None = None) -> Book:
+def random_book(
+    book_group: BookGroup | None = None,
+    bible_version: Version = Version.NEW_INTERNATIONAL,
+) -> Book:
     """Returns random book from the Bible. If book_group is given, the
     book is chosen from that group.
 
@@ -47,8 +52,8 @@ def random_book(book_group: BookGroup | None = None) -> Book:
         # Books in the selected group only
         allowed_books = list(book_group.books)
     else:
-        # All books
-        allowed_books = list(Book)
+        # All books in the given version
+        allowed_books = list(titles.SHORT_TITLES[bible_version].keys())
 
     return random.choice(allowed_books)
 
@@ -72,6 +77,7 @@ def random_full_verse(
     chapter: int | None = None,
     verse_range: int = 1,
     book_group: BookGroup | None = None,
+    bible_version: Version = Version.NEW_INTERNATIONAL,
 ) -> str:
     """Gets a random verse.
 
@@ -83,6 +89,8 @@ def random_full_verse(
         verse_range (int, optional): number of verses to return. Defaults to 1.
         book_group (BookGroup | None, optional): if given, the book will be
             from this group. Defaults to None.
+        bible_version (Version, optional): version of the bible to use. Defaults
+            to NEW_INTERNATIONAL_VERSION (NIV).
 
     Raises:
         InvalidArgumentsError: Raised if the chapter is given and book
@@ -106,7 +114,7 @@ def random_full_verse(
         raise InvalidArgumentsError("Cannot provide chapter without book")
 
     if not book:
-        _book = random_book(book_group=book_group)
+        _book = random_book(book_group=book_group, bible_version=bible_version)
         _chapter = random_chapter_from_book(_book)
     elif book and not chapter:
         _book = book

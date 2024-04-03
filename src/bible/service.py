@@ -21,7 +21,7 @@ def get_parsed_verse(
     bible_version: (
         bible.Version | AcceptedVersion
     ) = bible.Version.NEW_INTERNATIONAL,
-    chapter_prefix:bool = False
+    chapter_prefix: bool = False,
 ) -> tuple[tuple[str, str], list[str]]:
     """Parses a verse into the book, chapter and requested verses' text.
 
@@ -75,10 +75,15 @@ def get_random_verse(
     ) = bible.Version.NEW_INTERNATIONAL,
 ) -> tuple[str, str]:
 
+    if isinstance(bible_version, AcceptedVersion):
+        bible_version = bible.Version[bible_version.value]
+
     _book = get_book(r_book) if r_book else None
     _book_group = book_group.pythonbible_book_group()
 
-    full_verse = random_full_verse(_book, r_chapter, verse_range, _book_group)
+    full_verse = random_full_verse(
+        _book, r_chapter, verse_range, _book_group, bible_version
+    )
 
     (_, _), verse_text = get_parsed_verse(full_verse, bible_version)
 
