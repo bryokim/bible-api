@@ -4,7 +4,6 @@ from typing import Annotated
 from pythonbible.errors import InvalidVerseError
 
 from src.bible.dependencies import (
-    normalize_bible_version,
     validate_book,
     validate_chapter,
     validate_verse,
@@ -31,8 +30,8 @@ async def verse(
     book: str = Depends(validate_book),
     chapter: int = Depends(validate_chapter),
     verse: str = Depends(validate_verse),
-    book_group: AcceptedBookGroup | None = AcceptedBookGroup.ANY,
-    bible_version: AcceptedVersion | None = Depends(normalize_bible_version),
+    book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
     full_verse = f"{book.strip()} {chapter}:{verse.strip()}"
 
@@ -57,7 +56,7 @@ async def random_verse(
     r_chapter: str | None = Depends(validate_random_chapter),
     verse_range: Annotated[int, Query(gt=0, le=3)] = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
-    bible_version: AcceptedVersion = Depends(normalize_bible_version),
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
     full_verse, verse_text = get_random_verse(
         r_book, r_chapter, verse_range, book_group, bible_version

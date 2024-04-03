@@ -1,35 +1,16 @@
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 
 from pythonbible.bible import titles
 from pythonbible.validator import is_valid_chapter, is_valid_verse
 
-from src.bible.constants import SHORT_VERSION_NAMES
 from src.bible.schemas import AcceptedBookGroup, AcceptedVersion
 from src.bible.utils import get_book
-
-
-def normalize_bible_version(
-    bible_version: AcceptedVersion = AcceptedVersion.NIV,
-) -> AcceptedVersion:
-    """Converts short version names into long names that can be easily
-    passed to pythonbible module.
-
-    Args:
-        bible_version (AcceptedVersions): Bible version that client has requested.
-
-    Returns:
-        AcceptedVersions: Normalized bible version.
-    """
-    if bible_version.value in SHORT_VERSION_NAMES:
-        return AcceptedVersion[bible_version.value]
-
-    return bible_version
 
 
 def validate_book(
     book: str,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
-    bible_version: AcceptedVersion = Depends(normalize_bible_version),
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> str:
     """Check to see if the given Book is a valid book of the Bible
     and can be found in the given book group and bible version.

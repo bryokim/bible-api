@@ -18,16 +18,14 @@ def get_verse_text(verse: str, bible_version: bible.Version):
 
 def get_parsed_verse(
     verse: str,
-    bible_version: (
-        bible.Version | AcceptedVersion
-    ) = bible.Version.NEW_INTERNATIONAL,
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
     chapter_prefix: bool = False,
 ) -> tuple[tuple[str, str], list[str]]:
     """Parses a verse into the book, chapter and requested verses' text.
 
     Args:
         verse (str): The verse(s) to get. Example `Genesis 1:1-4`
-        bible_version (bible.Version, optional): The version of the bible to
+        bible_version (AcceptedVersion, optional): The version of the bible to
             use. Defaults to `New International Version (NIV)`.
         chapter_prefix (bool, Optional): Whether to include `Chapter` prefix in
             the chapter return value. Defaults to False.
@@ -46,10 +44,9 @@ def get_parsed_verse(
                          # on the version of the bible.
     ```
     """
-    if isinstance(bible_version, AcceptedVersion):
-        bible_version = bible.Version[bible_version.value]
+    _bible_version = bible_version.pythonbible_version()
 
-    text = get_verse_text(verse, bible_version=bible_version)
+    text = get_verse_text(verse, bible_version=_bible_version)
 
     text_list = list(filter(lambda x: x != "", text.split("\n")))
 
@@ -70,19 +67,15 @@ def get_random_verse(
     r_chapter: int | None = None,
     verse_range: int = 0,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
-    bible_version: (
-        bible.Version | AcceptedVersion
-    ) = bible.Version.NEW_INTERNATIONAL,
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> tuple[str, str]:
-
-    if isinstance(bible_version, AcceptedVersion):
-        bible_version = bible.Version[bible_version.value]
 
     _book = get_book(r_book) if r_book else None
     _book_group = book_group.pythonbible_book_group()
+    _bible_version = bible_version.pythonbible_version()
 
     full_verse = random_full_verse(
-        _book, r_chapter, verse_range, _book_group, bible_version
+        _book, r_chapter, verse_range, _book_group, _bible_version
     )
 
     (_, _), verse_text = get_parsed_verse(full_verse, bible_version)
