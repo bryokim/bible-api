@@ -33,12 +33,6 @@ class AcceptedVersion(StrEnum):
         return Version[_value]
 
 
-class Testament(StrEnum):
-    ANY = "ANY"
-    NEW = "New Testament"
-    OLD = "Old Testament"
-
-
 class AcceptedBookGroup(StrEnum):
     # Default value for matching all
     ANY = "Any"
