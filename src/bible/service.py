@@ -21,6 +21,7 @@ def get_parsed_verse(
     bible_version: (
         bible.Version | AcceptedVersion
     ) = bible.Version.NEW_INTERNATIONAL,
+    chapter_prefix:bool = False
 ) -> tuple[tuple[str, str], list[str]]:
     """Parses a verse into the book, chapter and requested verses' text.
 
@@ -28,6 +29,8 @@ def get_parsed_verse(
         verse (str): The verse(s) to get. Example `Genesis 1:1-4`
         bible_version (bible.Version, optional): The version of the bible to
             use. Defaults to `New International Version (NIV)`.
+        chapter_prefix (bool, Optional): Whether to include `Chapter` prefix in
+            the chapter return value. Defaults to False.
 
     Returns:
         tuple[tuple[str, str], list[str]]: A tuple of a tuple of book and
@@ -51,11 +54,15 @@ def get_parsed_verse(
     text_list = list(filter(lambda x: x != "", text.split("\n")))
 
     try:
-        book_and_chapter, verses = (text_list[0], text_list[1]), text_list[2:]
+        (book, chapter), verses = (text_list[0], text_list[1]), text_list[2:]
+
+        if not chapter_prefix:  # Remove the Chapter prefix
+            chapter = chapter.strip().title().removeprefix("Chapter")
+
     except IndexError:
         raise bible.errors.InvalidVerseError("Invalid verse entered")
 
-    return book_and_chapter, verses
+    return (book, chapter), verses
 
 
 def get_random_verse(
