@@ -3,9 +3,9 @@ from __future__ import annotations
 from enum import StrEnum
 from pydantic import BaseModel
 
-from pythonbible import BookGroup
+from pythonbible import BookGroup, Version
 
-from src.bible.constants import MAPPED_BOOK_GROUPS
+from src.bible.constants import MAPPED_BOOK_GROUPS, SHORT_VERSION_NAMES
 
 
 class AcceptedVersion(StrEnum):
@@ -16,6 +16,21 @@ class AcceptedVersion(StrEnum):
     NIV_short = "NIV"
     ASV_short = "ASV"
     kJV_short = "KJV"
+
+    def pythonbible_version(self: AcceptedVersion) -> Version:
+        """
+        Returns pythonbible.Version equivalent of the AcceptedVersion
+
+        Returns:
+            Version: equivalent pythonbible Version.
+        """
+
+        _value = self.value
+
+        if _value in SHORT_VERSION_NAMES:
+            _value = AcceptedVersion[_value].value
+
+        return Version[_value]
 
 
 class Testament(StrEnum):

@@ -1,5 +1,6 @@
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 
+from pythonbible.bible import titles
 from pythonbible.validator import is_valid_chapter, is_valid_verse
 
 from src.bible.constants import SHORT_VERSION_NAMES
@@ -28,36 +29,52 @@ def normalize_bible_version(
 def validate_book(
     book: str,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
+    bible_version: AcceptedVersion = Depends(normalize_bible_version),
 ) -> str:
-    """Check to see if the given Book is a valid book of the Bible.
+    """Check to see if the given Book is a valid book of the Bible
+    and can be found in the given book group and bible version.
 
     Args:
         book (str): Book of the bible being requested
+        book_group (AcceptedBookGroup, optional): a group of the books of the
+            bible. Defaults to AcceptedBookGroup.ANY.
+        bible_version (AcceptedVersion, optional): Bible version to use.
+            Defaults to NIV.
 
     Raises:
         HTTPException: Raised if the book does not match any of the
             given books in Book.
         HTTPException: Raised if the book is not in the given book group.
+        HTTPException: Raised if the book is not found in the given Bible
+            version.
 
     Returns:
         str: title of the matched book.
     """
 
     _book = get_book(book)
+    _pythonbible_version = bible_version.pythonbible_version()
 
     if _book:
-        if (
+        if not (
             book_group is book_group.ANY
             or _book in book_group.pythonbible_book_group().books
         ):
-            return _book.title
-        else:
             raise HTTPException(
                 status_code=400,
                 detail="{} not in {} group".format(
                     _book.title, book_group.value
                 ),
             )
+        elif _book not in titles.SHORT_TITLES[_pythonbible_version].keys():
+            raise HTTPException(
+                status_code=400,
+                detail="{} not in {}".format(
+                    _book.title, _pythonbible_version.title
+                ),
+            )
+        else:
+            return _book.title
 
     raise HTTPException(status_code=400, detail="{} not found".format(book))
 
@@ -162,13 +179,17 @@ def validate_verse(verse: str, book: str, chapter: int) -> str:
 def validate_random_book(
     r_book: str | None = None,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> str | None:
     """Check to see if the given book is a valid book and is in the given group
+    and can be found in given bible version.
 
     Args:
         r_book (str | None, optional): a book of the bible. Defaults to None.
         book_group (AcceptedBookGroup, optional): a group of the books of the
             bible. Defaults to AcceptedBookGroup.ANY.
+        bible_version (AcceptedVersion, optional): Bible version to use.
+            Defaults to NIV.
 
     Returns:
         str | None: Validated book of the bible. None if r_book is None
@@ -177,7 +198,7 @@ def validate_random_book(
     if not r_book:
         return None
 
-    return validate_book(r_book, book_group)
+    return validate_book(r_book, book_group, bible_version)
 
 
 def validate_random_chapter(
