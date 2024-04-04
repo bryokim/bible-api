@@ -22,3 +22,5 @@ MAPPED_BOOK_GROUPS = {
     "General Epistles": BookGroup.NEW_TESTAMENT_GENERAL_EPISTLES,
     "Apocalyptic": BookGroup.NEW_TESTAMENT_APOCALYPTIC,
 }
+
+DAILY_VERSE_FILE = "daily_verse.json"

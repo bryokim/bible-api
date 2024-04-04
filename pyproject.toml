@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "holy-text"
-version = "0.1.0"
+version = "0.1.1"
 description = "API for accessing the bible"
 authors = ["Brian Kim <bryo.kim1@gmail.com>"]
 license = "MIT"

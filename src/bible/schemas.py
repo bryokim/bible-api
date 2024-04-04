@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import re
+
+from datetime import date
 from enum import StrEnum
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from pythonbible import BookGroup, Version
 
@@ -64,3 +67,29 @@ class VerseResponse(BaseModel):
     verse_text: list[str]
     book_group: AcceptedBookGroup
     bible_version: AcceptedVersion
+
+
+class DailyVerse(BaseModel):
+    reference: str
+    verse_text: list[str]
+    bible_version: str
+    day: date
+
+
+class DailyVerseResponse(BaseModel):
+    reference: str
+    verse_text: list[str]
+    bible_version: str
+    day: str
+
+    @validator("day", always=True, pre=True)
+    def validate_date(cls, v: date) -> str:
+        _ctime_date = v.ctime()  # Convert to ctime format
+
+        # Remove extra spacing
+        _ctime_date = re.sub(r"\s+", " ", _ctime_date)
+
+        # Remove time details since its always 00:00:00
+        _ctime_date = re.sub(r"00:00:00\s", "", _ctime_date)
+
+        return _ctime_date

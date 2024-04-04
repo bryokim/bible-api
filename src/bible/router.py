@@ -11,11 +11,16 @@ from src.bible.dependencies import (
     validate_random_chapter,
 )
 from src.bible.schemas import (
+    DailyVerseResponse,
     AcceptedVersion,
     VerseResponse,
     AcceptedBookGroup,
 )
-from src.bible.service import get_parsed_verse, get_random_verse
+from src.bible.service import (
+    get_parsed_verse,
+    get_random_verse,
+    get_daily_verse,
+)
 
 
 bible_router = APIRouter(prefix="/bible", tags=["bible"])
@@ -68,3 +73,11 @@ async def random_verse(
         "book_group": book_group.value if book_group else "",
         "bible_version": bible_version.value if bible_version else "",
     }
+
+
+@bible_router.get("/daily-verse")
+async def daily_verse(
+    bible_version: AcceptedVersion = AcceptedVersion.NIV,
+) -> DailyVerseResponse:
+    verse = get_daily_verse(bible_version)
+    return verse
