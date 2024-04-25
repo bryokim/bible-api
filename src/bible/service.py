@@ -69,7 +69,7 @@ def get_random_verse(
     verse_range: int = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
-) -> tuple[str, str]:
+) -> tuple[str, list[str]]:
 
     _book = get_book(r_book) if r_book else None
     _book_group = book_group.pythonbible_book_group()
