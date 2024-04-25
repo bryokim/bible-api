@@ -1,14 +1,13 @@
 import random
 import re
-
 from functools import lru_cache
 
 from pythonbible.bible import titles
-from pythonbible.books import Book
 from pythonbible.book_groups import BookGroup
+from pythonbible.books import Book
 from pythonbible.validator import is_valid_chapter
-from pythonbible.versions import Version
 from pythonbible.verses import MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER
+from pythonbible.versions import Version
 
 from src.bible.exceptions import InvalidArgumentsError
 
@@ -96,6 +95,7 @@ def random_full_verse(
         InvalidArgumentsError: Raised if the chapter is given and book
             is not given.
         InvalidArgumentsError: Raised if chapter is not found in given book
+        InvalidArgumentsError: Raised if the verse_range is less than 1
 
     Returns:
         str: full verse
@@ -112,6 +112,9 @@ def random_full_verse(
 
     if not book and chapter:
         raise InvalidArgumentsError("Cannot provide chapter without book")
+
+    if verse_range < 1:
+        raise InvalidArgumentsError("verse_range must be greater than 0")
 
     if not book:
         _book = random_book(book_group=book_group, bible_version=bible_version)
@@ -133,7 +136,7 @@ def random_full_verse(
         _chapter - 1
     ]
 
-    from_verse = random.choice(range(1, number_verses + 1 - verse_range))
+    from_verse = random.choice(range(1, number_verses + 1 - (verse_range - 1)))
 
     return (
         "{} {}:{}-{}".format(

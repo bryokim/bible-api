@@ -1,11 +1,8 @@
 import pythonbible as bible
 
 from src.bible import daily_verse_storage
-from src.bible.schemas import AcceptedVersion, AcceptedBookGroup, DailyVerse
-from src.bible.utils import (
-    random_full_verse,
-    get_book,
-)
+from src.bible.schemas import AcceptedBookGroup, AcceptedVersion, DailyVerse
+from src.bible.utils import get_book, random_full_verse
 
 
 def get_verse_text(verse: str, bible_version: bible.Version):
@@ -69,7 +66,7 @@ def get_parsed_verse(
 def get_random_verse(
     r_book: str | None = None,
     r_chapter: int | None = None,
-    verse_range: int = 0,
+    verse_range: int = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> tuple[str, str]:
