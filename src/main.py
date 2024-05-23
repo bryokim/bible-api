@@ -7,4 +7,4 @@ def root():
     return "Welcome to bible-api"
 
 
-app.include_router(bible_router)
+app.include_router(bible_router, prefix="/api/v1")
