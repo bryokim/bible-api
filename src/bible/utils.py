@@ -145,3 +145,46 @@ def random_full_verse(
         if verse_range > 1
         else "{} {}:{}".format(_book.title, _chapter, from_verse)
     )
+
+
+# Regex for matching the book, chapter and verse
+# in a full_verse string like Genesis 1:1-2.
+# The 3 parts are grouped so that they can be accessed
+# easily from the match object with their indexes as below:
+#   0 -> Book
+#   1 -> Chapter
+#   2 -> Verse
+BOOK_REGEX = r"(\d?\s*?[a-zA-Z]+)?"
+CHAPTER_REGEX = r"(\d+)"
+VERSE_REGEX = r"(\s*?\d+\s*?(-\s*?\d+)?)?"
+
+FULL_VERSE_REGEX = r"^{}\s*?{}\s*?:?{}".format(
+    BOOK_REGEX, CHAPTER_REGEX, VERSE_REGEX
+)
+
+
+def parse_full_verse(full_verse: str) -> tuple[str, int | None, str | None]:
+    """Parses a full verse, eg `Genesis 1:1-2`, into the book, chapter and verse.
+
+    Args:
+        full_verse (str): The full verse to parse.
+
+    Returns:
+        tuple[str, int | None, str | None]: A tuple of the book, chapter and verse
+            in that order.
+    """
+
+    mo = re.search(FULL_VERSE_REGEX, full_verse)
+
+    if mo:
+        book, chapter, verse, _ = mo.groups()
+
+        if chapter:
+            try:
+                chapter = int(chapter)
+            except ValueError:
+                chapter = None
+    else:
+        book, chapter, verse = full_verse, None, None
+
+    return book, chapter, verse

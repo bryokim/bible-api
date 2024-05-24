@@ -1,12 +1,12 @@
+import re
+
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import Annotated
 
 from pythonbible.errors import InvalidVerseError
 
 from src.bible.dependencies import (
-    validate_book,
-    validate_chapter,
-    validate_verse,
+    validate_full_verse,
     validate_random_book,
     validate_random_chapter,
 )
@@ -32,14 +32,10 @@ bible_router = APIRouter(prefix="/bible", tags=["bible"])
     status_code=status.HTTP_200_OK,
 )
 async def verse(
-    book: str = Depends(validate_book),
-    chapter: int = Depends(validate_chapter),
-    verse: str = Depends(validate_verse),
+    full_verse: str = Depends(validate_full_verse),
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
-    full_verse = f"{book.strip()} {chapter}:{verse.strip()}"
-
     try:
         (_book, _chapter), verse_text = get_parsed_verse(
             full_verse, bible_version
@@ -47,8 +43,12 @@ async def verse(
     except InvalidVerseError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
+    # Get verse from the full_verse
+    mo = re.search(r":.+", full_verse)
+    _verse = mo.group() if mo else ""
+
     return {
-        "reference": "{} {}:{}".format(_book, _chapter, verse),
+        "reference": "{} {}{}".format(_book.strip(), _chapter.strip(), _verse),
         "verse_text": verse_text,
         "book_group": book_group.value if book_group else "",
         "bible_version": bible_version,
