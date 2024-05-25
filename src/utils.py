@@ -9,7 +9,7 @@ from pythonbible.validator import is_valid_chapter
 from pythonbible.verses import MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER
 from pythonbible.versions import Version
 
-from src.bible.exceptions import InvalidArgumentsError
+from src.exceptions import InvalidArgumentsError
 
 
 @lru_cache

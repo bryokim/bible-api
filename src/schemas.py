@@ -8,7 +8,7 @@ from pydantic import BaseModel, validator
 
 from pythonbible import BookGroup, Version
 
-from src.bible.constants import MAPPED_BOOK_GROUPS, SHORT_VERSION_NAMES
+from src.constants import MAPPED_BOOK_GROUPS, SHORT_VERSION_NAMES
 
 
 class AcceptedVersion(StrEnum):

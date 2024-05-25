@@ -1,8 +1,8 @@
 import pythonbible as bible
 
 from src.bible import daily_verse_storage
-from src.bible.schemas import AcceptedBookGroup, AcceptedVersion, DailyVerse
-from src.bible.utils import get_book, random_reference
+from src.schemas import AcceptedBookGroup, AcceptedVersion, DailyVerse
+from src.utils import get_book, random_reference
 
 
 def get_verse_text(verse: str, bible_version: bible.Version):

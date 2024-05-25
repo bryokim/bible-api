@@ -3,8 +3,8 @@ from fastapi import HTTPException
 from pythonbible.bible import titles
 from pythonbible.validator import is_valid_chapter, is_valid_verse
 
-from src.bible.schemas import AcceptedBookGroup, AcceptedVersion
-from src.bible.utils import get_book, parse_reference
+from src.schemas import AcceptedBookGroup, AcceptedVersion
+from src.utils import get_book, parse_reference
 
 
 def validate_book(

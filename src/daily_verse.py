@@ -5,9 +5,9 @@ from pathlib import Path
 
 from pythonbible import Version
 
-from src.bible.constants import DAILY_VERSE_FILE
-from src.bible.schemas import DailyVerse
-from src.bible.utils import random_reference
+from src.constants import DAILY_VERSE_FILE
+from src.schemas import DailyVerse
+from src.utils import random_reference
 
 
 class DailyVerseStorage:

@@ -5,18 +5,18 @@ from typing import Annotated
 
 from pythonbible.errors import InvalidVerseError
 
-from src.bible.dependencies import (
+from src.dependencies import (
     validate_reference,
     validate_random_book,
     validate_random_chapter,
 )
-from src.bible.schemas import (
+from src.schemas import (
     DailyVerseResponse,
     AcceptedVersion,
     VerseResponse,
     AcceptedBookGroup,
 )
-from src.bible.service import (
+from src.service import (
     get_parsed_verse,
     get_random_verse,
     get_daily_verse,
