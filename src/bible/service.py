@@ -2,7 +2,7 @@ import pythonbible as bible
 
 from src.bible import daily_verse_storage
 from src.bible.schemas import AcceptedBookGroup, AcceptedVersion, DailyVerse
-from src.bible.utils import get_book, random_full_verse
+from src.bible.utils import get_book, random_reference
 
 
 def get_verse_text(verse: str, bible_version: bible.Version):
@@ -75,13 +75,13 @@ def get_random_verse(
     _book_group = book_group.pythonbible_book_group()
     _bible_version = bible_version.pythonbible_version()
 
-    full_verse = random_full_verse(
+    reference = random_reference(
         _book, r_chapter, verse_range, _book_group, _bible_version
     )
 
-    (_, _), verse_text = get_parsed_verse(full_verse, bible_version)
+    (_, _), verse_text = get_parsed_verse(reference, bible_version)
 
-    return full_verse, verse_text
+    return reference, verse_text
 
 
 def new_daily_verse(bible_version: AcceptedVersion) -> DailyVerse:

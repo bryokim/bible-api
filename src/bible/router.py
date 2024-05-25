@@ -6,7 +6,7 @@ from typing import Annotated
 from pythonbible.errors import InvalidVerseError
 
 from src.bible.dependencies import (
-    validate_full_verse,
+    validate_reference,
     validate_random_book,
     validate_random_chapter,
 )
@@ -32,19 +32,19 @@ bible_router = APIRouter(prefix="/bible", tags=["bible"])
     status_code=status.HTTP_200_OK,
 )
 async def verse(
-    full_verse: str = Depends(validate_full_verse),
+    reference: str = Depends(validate_reference),
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
     try:
         (_book, _chapter), verse_text = get_parsed_verse(
-            full_verse, bible_version
+            reference, bible_version
         )
     except InvalidVerseError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
-    # Get verse from the full_verse
-    mo = re.search(r":.+", full_verse)
+    # Get verse from the reference
+    mo = re.search(r":.+", reference)
     _verse = mo.group() if mo else ""
 
     return {
@@ -63,12 +63,12 @@ async def random_verse(
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
-    full_verse, verse_text = get_random_verse(
+    reference, verse_text = get_random_verse(
         r_book, r_chapter, verse_range, book_group, bible_version
     )
 
     return {
-        "reference": full_verse,
+        "reference": reference,
         "verse_text": verse_text,
         "book_group": book_group.value if book_group else "",
         "bible_version": bible_version.value if bible_version else "",

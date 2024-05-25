@@ -71,7 +71,7 @@ def random_chapter_from_book(book: Book) -> int:
     return random.choice(range(1, number_chapters + 1))
 
 
-def random_full_verse(
+def random_reference(
     book: Book | None = None,
     chapter: int | None = None,
     verse_range: int = 1,
@@ -98,15 +98,15 @@ def random_full_verse(
         InvalidArgumentsError: Raised if the verse_range is less than 1
 
     Returns:
-        str: full verse
+        str: reference
 
     Example:
     ```Python
-    full_verse = random_full_verse(Book.Genesis, 1, 3)
-    print(full_verse)   # Genesis 1:6-8
+    reference = random_reference(Book.Genesis, 1, 3)
+    print(reference)   # Genesis 1:6-8
 
-    full_verse = random_full_verse(verse_range=1, book_group=BookGroup.NEW_TESTAMENT_GOSPELS)
-    print(full_verse)   # Mark 19:4-5
+    reference = random_reference(verse_range=1, book_group=BookGroup.NEW_TESTAMENT_GOSPELS)
+    print(reference)   # Mark 19:4-5
     ```
     """
 
@@ -148,7 +148,7 @@ def random_full_verse(
 
 
 # Regex for matching the book, chapter and verse
-# in a full_verse string like Genesis 1:1-2.
+# in a reference string like Genesis 1:1-2.
 # The 3 parts are grouped so that they can be accessed
 # easily from the match object with their indexes as below:
 #   0 -> Book
@@ -158,23 +158,23 @@ BOOK_REGEX = r"(\d?\s*?[a-zA-Z]+)?"
 CHAPTER_REGEX = r"(\d+)"
 VERSE_REGEX = r"(\s*?\d+\s*?(-\s*?\d+)?)?"
 
-FULL_VERSE_REGEX = r"^{}\s*?{}\s*?:?{}".format(
+REFERENCE_REGEX = r"^{}\s*?{}\s*?:?{}".format(
     BOOK_REGEX, CHAPTER_REGEX, VERSE_REGEX
 )
 
 
-def parse_full_verse(full_verse: str) -> tuple[str, int | None, str | None]:
-    """Parses a full verse, eg `Genesis 1:1-2`, into the book, chapter and verse.
+def parse_reference(reference: str) -> tuple[str, int | None, str | None]:
+    """Parses a reference, eg `Genesis 1:1-2`, into the book, chapter and verse.
 
     Args:
-        full_verse (str): The full verse to parse.
+        reference (str): The reference to parse.
 
     Returns:
         tuple[str, int | None, str | None]: A tuple of the book, chapter and verse
             in that order.
     """
 
-    mo = re.search(FULL_VERSE_REGEX, full_verse)
+    mo = re.search(REFERENCE_REGEX, reference)
 
     if mo:
         book, chapter, verse, _ = mo.groups()
@@ -185,6 +185,6 @@ def parse_full_verse(full_verse: str) -> tuple[str, int | None, str | None]:
             except ValueError:
                 chapter = None
     else:
-        book, chapter, verse = full_verse, None, None
+        book, chapter, verse = reference, None, None
 
     return book, chapter, verse

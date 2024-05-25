@@ -7,7 +7,7 @@ from pythonbible import Version
 
 from src.bible.constants import DAILY_VERSE_FILE
 from src.bible.schemas import DailyVerse
-from src.bible.utils import random_full_verse
+from src.bible.utils import random_reference
 
 
 class DailyVerseStorage:
@@ -31,7 +31,7 @@ class DailyVerseStorage:
             bible_version (Version, optional): Bible version to use.
                 Defaults to Version.NEW_INTERNATIONAL.
         """
-        self.__reference = random_full_verse(bible_version=bible_version)
+        self.__reference = random_reference(bible_version=bible_version)
 
     def get(self, bible_version: Version) -> DailyVerse | None:
         """Get the daily verse in a certain bible version.

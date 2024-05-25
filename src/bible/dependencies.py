@@ -4,7 +4,7 @@ from pythonbible.bible import titles
 from pythonbible.validator import is_valid_chapter, is_valid_verse
 
 from src.bible.schemas import AcceptedBookGroup, AcceptedVersion
-from src.bible.utils import get_book, parse_full_verse
+from src.bible.utils import get_book, parse_reference
 
 
 def validate_book(
@@ -157,37 +157,37 @@ def validate_verse(verse: str, book: str, chapter: int) -> str:
     )
 
 
-def validate_full_verse(
-    full_verse: str | None = None,
+def validate_reference(
+    reference: str | None = None,
     book: str | None = None,
     chapter: int | None = None,
     verse: str | None = None,
 ):
-    """Check if the given full bible verse is valid.
+    """Check if the given reference is valid.
 
     Args:
-        full_verse (str | None, optional): Verse with book, chapter and verse.
+        reference (str | None, optional): Verse with book, chapter and verse.
             Defaults to None.
         book (str | None, optional): Book of the bible. Defaults to None.
         chapter (int | None, optional): Chapter of the book. Defaults to None.
         verse (str | None, optional): Verse of the chapter. Defaults to None.
 
     Raises:
-        HTTPException: If the book is not given and cannot be gotten from full_verse.
-        HTTPException: If the chapter is not given and cannot be gotten from full_verse.
-        HTTPException: If the verse is not given and cannot be gotten from full_verse.
+        HTTPException: If the book is not given and cannot be gotten from reference.
+        HTTPException: If the chapter is not given and cannot be gotten from reference.
+        HTTPException: If the verse is not given and cannot be gotten from reference.
 
     Returns:
-        str: A string of the full verse that is validated.
+        str: A string of the reference that is validated.
     """
 
-    if full_verse is not None:
-        book, chapter, verse = parse_full_verse(full_verse)
+    if reference is not None:
+        book, chapter, verse = parse_reference(reference)
 
     if book is None:
         raise HTTPException(
             status_code=400,
-            detail="Must provide `book` if `full_verse` is not given",
+            detail="Must provide `book` if `reference` is not given",
         )
 
     if chapter is None:
