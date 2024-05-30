@@ -55,10 +55,16 @@ async def get_from_reference(
     reference: str = Depends(validate_reference),
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
-):
+) -> VerseResponse:
+    try:
+        (_, _), verse_text = get_parsed_verse(reference, bible_version)
+    except InvalidVerseError as e:
+        raise HTTPException(status_code=404, detail=e.message)
+
     return {
         "reference": reference,
-        "book_group": book_group.value,
+        "verse_text": verse_text,
+        "book_group": book_group.value if book_group else "",
         "bible_version": bible_version,
     }
 
