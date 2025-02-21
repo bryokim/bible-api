@@ -137,15 +137,13 @@ def random_reference(
                 "chapter {} not in {}".format(chapter, _book.title)
             )
 
-        _chapter = chapter # pyright:ignore[reportAssignmentType]
+        _chapter = chapter  # pyright:ignore[reportAssignmentType]
 
     chapters = MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER.get(_book)
     number_verses: int = 1
 
     if chapters:
-        number_verses = chapters[
-            _chapter - 1
-        ]
+        number_verses = chapters[_chapter - 1]
 
     from_verse = random.choice(range(1, number_verses + 1 - (verse_range - 1)))
 
@@ -165,13 +163,11 @@ def random_reference(
 #   0 -> Book
 #   1 -> Chapter
 #   2 -> Verse
-BOOK_REGEX = r"(\d?\s*?[a-zA-Z]+)?"
+BOOK_REGEX = r"(\d?\s*[a-zA-Z]+)?"
 CHAPTER_REGEX = r"(\d+)"
-VERSE_REGEX = r"(\s*?\d+\s*?(-\s*?\d+)?)?"
+VERSE_REGEX = r"(\d+\s*(-\s*\d+)?)?"
 
-REFERENCE_REGEX = r"^{}\s*?{}\s*?:?{}".format(
-    BOOK_REGEX, CHAPTER_REGEX, VERSE_REGEX
-)
+REFERENCE_REGEX = r"^{}\s*{}\s*:?\s*{}".format(BOOK_REGEX, CHAPTER_REGEX, VERSE_REGEX)
 
 
 def parse_reference(reference: str) -> tuple[str, int | None, str | None]:
