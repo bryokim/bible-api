@@ -66,7 +66,11 @@ def random_chapter_from_book(book: Book) -> int:
     Returns:
         int: random chapter from book
     """
-    number_chapters = len(MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER.get(book))
+    chapters = MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER.get(book)
+    number_chapters = 0
+
+    if chapters:
+        number_chapters = len(chapters)
 
     return random.choice(range(1, number_chapters + 1))
 
@@ -116,6 +120,9 @@ def random_reference(
     if verse_range < 1:
         raise InvalidArgumentsError("verse_range must be greater than 0")
 
+    _chapter: int = 1
+    _book: Book
+
     if not book:
         _book = random_book(book_group=book_group, bible_version=bible_version)
         _chapter = random_chapter_from_book(_book)
@@ -125,16 +132,20 @@ def random_reference(
     else:
         _book = book
 
-        if not is_valid_chapter(_book, chapter):
+        if chapter and not is_valid_chapter(_book, chapter):
             raise InvalidArgumentsError(
                 "chapter {} not in {}".format(chapter, _book.title)
             )
 
-        _chapter = chapter
+        _chapter = chapter # pyright:ignore[reportAssignmentType]
 
-    number_verses = MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER.get(_book)[
-        _chapter - 1
-    ]
+    chapters = MAX_VERSE_NUMBER_BY_BOOK_AND_CHAPTER.get(_book)
+    number_verses: int = 1
+
+    if chapters:
+        number_verses = chapters[
+            _chapter - 1
+        ]
 
     from_verse = random.choice(range(1, number_verses + 1 - (verse_range - 1)))
 
@@ -176,12 +187,16 @@ def parse_reference(reference: str) -> tuple[str, int | None, str | None]:
 
     mo = re.search(REFERENCE_REGEX, reference)
 
-    if mo:
-        book, chapter, verse, _ = mo.groups()
+    chapter: int | None = None
+    book: str = ""
+    verse: str | None = None
 
-        if chapter:
+    if mo:
+        book, _chapter, verse, _ = mo.groups()
+
+        if _chapter:
             try:
-                chapter = int(chapter)
+                chapter = int(_chapter)
             except ValueError:
                 chapter = None
     else:

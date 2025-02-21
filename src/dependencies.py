@@ -28,6 +28,7 @@ def validate_book(
         HTTPException: Raised if the book is not in the given book group.
         HTTPException: Raised if the book is not found in the given Bible
             version.
+        HTTPException: Raised if the book is not found in the given book group.
 
     Returns:
         str: title of the matched book.
@@ -39,7 +40,7 @@ def validate_book(
     if _book:
         if not (
             book_group is book_group.ANY
-            or _book in book_group.pythonbible_book_group().books
+            or _book in book_group.pythonbible_book_group().books #pyright:ignore[reportOptionalMemberAccess]
         ):
             raise HTTPException(
                 status_code=400,
@@ -254,8 +255,7 @@ def validate_random_chapter(
 
     if not r_chapter:
         return None
-
-    if r_chapter and not r_book:
+    elif not r_book:
         raise HTTPException(
             status_code=400, detail="cannot provide chapter without book"
         )

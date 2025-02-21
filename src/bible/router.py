@@ -47,18 +47,18 @@ async def verse(
     mo = re.search(r":.+", reference)
     _verse = mo.group() if mo else ""
 
-    return {
-        "reference": "{} {}{}".format(_book.strip(), _chapter.strip(), _verse),
-        "verse_text": verse_text,
-        "book_group": book_group.value if book_group else "",
-        "bible_version": bible_version,
-    }
+    return VerseResponse(
+        reference= "{} {}{}".format(_book.strip(), _chapter.strip(), _verse),
+        verse_text= verse_text,
+        book_group= book_group,
+        bible_version= bible_version,
+    )
 
 
 @bible_router.get("/random-verse")
 async def random_verse(
     r_book: str | None = Depends(validate_random_book),
-    r_chapter: str | None = Depends(validate_random_chapter),
+    r_chapter: int | None = Depends(validate_random_chapter),
     verse_range: Annotated[int, Query(gt=0, le=3)] = 1,
     book_group: AcceptedBookGroup = AcceptedBookGroup.ANY,
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
@@ -67,12 +67,12 @@ async def random_verse(
         r_book, r_chapter, verse_range, book_group, bible_version
     )
 
-    return {
-        "reference": reference,
-        "verse_text": verse_text,
-        "book_group": book_group.value if book_group else "",
-        "bible_version": bible_version.value if bible_version else "",
-    }
+    return VerseResponse(
+        reference=reference,
+        verse_text= verse_text,
+        book_group= book_group,
+        bible_version= bible_version,
+    )
 
 
 @bible_router.get("/daily-verse")
@@ -80,4 +80,4 @@ async def daily_verse(
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> DailyVerseResponse:
     verse = get_daily_verse(bible_version)
-    return verse
+    return DailyVerseResponse(**verse.model_dump()) #pyright: ignore[reportAny]

@@ -2,6 +2,7 @@ import json
 
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 from pythonbible import Version
 
@@ -65,7 +66,7 @@ class DailyVerseStorage:
 
         try:
             with open(self.__file_path, "r") as f:
-                content: dict = json.load(f)
+                content: dict[str, dict[str, Any]] = json.load(f)
 
             self.__objects = {
                 key: DailyVerse(**value) for key, value in content.items()

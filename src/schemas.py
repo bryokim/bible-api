@@ -58,7 +58,7 @@ class AcceptedBookGroup(StrEnum):
     GENERAL_EPISTLES = "General Epistles"
     APOCALYPTIC = "Apocalyptic"
 
-    def pythonbible_book_group(self: AcceptedBookGroup) -> BookGroup:
+    def pythonbible_book_group(self: AcceptedBookGroup) -> BookGroup | None:
         return MAPPED_BOOK_GROUPS[self.value]
 
 

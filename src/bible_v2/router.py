@@ -61,12 +61,12 @@ async def get_from_reference(
     except InvalidVerseError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
-    return {
-        "reference": reference,
-        "verse_text": verse_text,
-        "book_group": book_group.value if book_group else "",
-        "bible_version": bible_version,
-    }
+    return VerseResponse(
+        reference= reference,
+        verse_text= verse_text,
+        book_group= book_group,
+        bible_version= bible_version,
+    )
 
 
 @router.get(
@@ -88,9 +88,9 @@ async def get_verse(
     except InvalidVerseError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
-    return {
-        "reference": reference,
-        "verse_text": verse_text,
-        "book_group": book_group.value if book_group else "",
-        "bible_version": bible_version,
-    }
+    return VerseResponse(
+        reference= reference,
+        verse_text= verse_text,
+        book_group= book_group,
+        bible_version= bible_version,
+    )
