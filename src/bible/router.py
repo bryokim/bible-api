@@ -1,27 +1,25 @@
 import re
-
-from fastapi import APIRouter, Depends, HTTPException, status, Query
 from typing import Annotated
 
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pythonbible.errors import InvalidVerseError
 
 from src.dependencies import (
-    validate_reference,
     validate_random_book,
     validate_random_chapter,
+    validate_reference,
 )
 from src.schemas import (
-    DailyVerseResponse,
-    AcceptedVersion,
-    VerseResponse,
     AcceptedBookGroup,
+    AcceptedVersion,
+    DailyVerseResponse,
+    VerseResponse,
 )
 from src.service import (
+    get_daily_verse,
     get_parsed_verse,
     get_random_verse,
-    get_daily_verse,
 )
-
 
 bible_router = APIRouter(prefix="/bible", tags=["bible"])
 
@@ -37,9 +35,7 @@ async def verse(
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> VerseResponse:
     try:
-        (_book, _chapter), verse_text = get_parsed_verse(
-            reference, bible_version
-        )
+        (_book, _chapter), verse_text = get_parsed_verse(reference, bible_version)
     except InvalidVerseError as e:
         raise HTTPException(status_code=404, detail=e.message)
 
@@ -48,10 +44,10 @@ async def verse(
     _verse = mo.group() if mo else ""
 
     return VerseResponse(
-        reference= "{} {}{}".format(_book.strip(), _chapter.strip(), _verse),
-        verse_text= verse_text,
-        book_group= book_group,
-        bible_version= bible_version,
+        reference="{} {}{}".format(_book.strip(), _chapter.strip(), _verse),
+        verse_text=verse_text,
+        book_group=book_group,
+        bible_version=bible_version.pythonbible_version().title,
     )
 
 
@@ -69,9 +65,9 @@ async def random_verse(
 
     return VerseResponse(
         reference=reference,
-        verse_text= verse_text,
-        book_group= book_group,
-        bible_version= bible_version,
+        verse_text=verse_text,
+        book_group=book_group,
+        bible_version=bible_version.pythonbible_version().title,
     )
 
 
@@ -80,4 +76,4 @@ async def daily_verse(
     bible_version: AcceptedVersion = AcceptedVersion.NIV,
 ) -> DailyVerseResponse:
     verse = get_daily_verse(bible_version)
-    return DailyVerseResponse(**verse.model_dump()) #pyright: ignore[reportAny]
+    return DailyVerseResponse(**verse.model_dump())  # pyright: ignore[reportAny]

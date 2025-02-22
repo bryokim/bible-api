@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import re
-
 from datetime import date
 from enum import StrEnum
-from pydantic import BaseModel, validator
 
+from pydantic import BaseModel, validator
 from pythonbible import BookGroup, Version
 
 from src.constants import MAPPED_BOOK_GROUPS, SHORT_VERSION_NAMES
@@ -66,7 +65,7 @@ class VerseResponse(BaseModel):
     reference: str
     verse_text: list[str]
     book_group: AcceptedBookGroup
-    bible_version: AcceptedVersion
+    bible_version: str
 
 
 class DailyVerse(BaseModel):

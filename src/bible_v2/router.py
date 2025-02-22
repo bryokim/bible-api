@@ -1,15 +1,15 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pythonbible.errors import InvalidVerseError
 
 from src.dependencies import (
     validate_book,
     validate_chapter,
-    validate_verse,
-    validate_reference,
-    validate_random_chapter,
     validate_random_book,
+    validate_random_chapter,
+    validate_reference,
+    validate_verse,
 )
 from src.schemas import AcceptedBookGroup, AcceptedVersion, VerseResponse
 from src.service import (
@@ -62,10 +62,10 @@ async def get_from_reference(
         raise HTTPException(status_code=404, detail=e.message)
 
     return VerseResponse(
-        reference= reference,
-        verse_text= verse_text,
-        book_group= book_group,
-        bible_version= bible_version,
+        reference=reference,
+        verse_text=verse_text,
+        book_group=book_group,
+        bible_version=bible_version.pythonbible_version().title,
     )
 
 
@@ -89,8 +89,8 @@ async def get_verse(
         raise HTTPException(status_code=404, detail=e.message)
 
     return VerseResponse(
-        reference= reference,
-        verse_text= verse_text,
-        book_group= book_group,
-        bible_version= bible_version,
+        reference=reference,
+        verse_text=verse_text,
+        book_group=book_group,
+        bible_version=bible_version.pythonbible_version().title,
     )
